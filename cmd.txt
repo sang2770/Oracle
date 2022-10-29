@@ -1,0 +1,76 @@
+show pdbs;
+
+alter session set container = orclpdb;
+
+alter session set "_ORACLE_SCRIPT"=true;
+
+show user;
+- Kết nối:
+	conn username/pass@Database
+	conn username/password;
+
+- Dọn dẹp dòng lệnh: cle scr
+- Một số bảng:
+	tabs: trong schema hiện tại
+	dba_tables: 
+	all_tables: 
+	user_tables: 
+- Truy vấn thông tin bảng: Desc ten_bang
+- Toán tử
+  || ghép nối nội dung cột thành 1 cột có thể nối thêm đoạn text
+  (+) Left join, Right join
+   join 
+
+get all user: select username from all_users
+
+
+change pass
+https://smarttechways.com/2020/07/14/change-the-sys-user-password-in-oracle/
+
+Chạy file:
+@<path>
+
+Lấy các bảng trong schema scott 
+select table_name from dba_tables where owner='SCOTT';
+
+
+lsnrctl status
+
+help
+
+select instance_name from v$instance;
+
+chuyen instance
+set oracle_sid=<name>
+
+List datafile and tablespace:
+select file_name, tablespace_name from dba_data_files
+
+https://csc.edu.vn/lap-trinh-va-csdl/tin-tuc/kien-thuc-lap-trinh/hoc-oracle--kien-thuc-co-ban-cho-nguoi-moi-bat-dau-802#:~:text=M%E1%BB%99t%20Tablespace%20bao%20g%E1%BB%93m%20m%E1%BB%99t%20hay%20nhi%E1%BB%81u%20t%E1%BA%ADp,qu%C3%A1%20tr%C3%ACnh%20t%E1%BA%A1o%20Database%20c%C3%B3%20t%C3%AAn%20l%C3%A0%20SYSTEM.
+
+TableSpace:
+show đường dẫn hiện tại db
+ select file_name from dba_data_files where tablespace_name = 'USERS';
+Tạo:
+ create tablespace userdata datafile 'G:\APP\ORACLE\ORADATA\userdata1.dbf' size 1M;
+Thay đổi kích thước:
+ alter database datafile  'G:\APP\ORACLE\ORADATA\userdata1.dbf' resize 2M;
+Thêm datafile
+alter tablespace userdata add datafile 'G:\APP\ORACLE\ORADATA\userdata2.dbf' size 1M;
+Drop:
+drop tablespace userdata including contents and datafiles;
+Thay đổi trạng thái:
+alter tablespace userdata offline;
+
+Các bảng thông tin
+select * from v$tablespace;
+select tablespace_name from dba_tablespaces;
+
++ Datafile:
+select file_name from dba_data_files;
+select name from v$datafile;
+
+Tự động mở rộng datafile
+create tablespace userdata datafile 'G:\APP\ORACLE\ORADATA\userdata1.dbf' size 1M autoextend on next 1M maxsize 50M;
+
+select file_name from dba_data_files where tablespace_name = 'USERDATA';
