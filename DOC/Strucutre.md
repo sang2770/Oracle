@@ -50,6 +50,7 @@
   >     Undo segment được sử dụng trong transaction (giao dịch) để tạo các thay đổi trong database. Trước khi thay đổi các dữ liệu hay các index blocks, các giá trị cũ sẽ được lưu giữ vào undo segments. Việc làm này cho phép user có thể phục hồi lại các thay đổi.
 - Bảng thông tin
   - > dba_segments
+  - > DBA_FREE_SPACE
   - > ` select SEGMENT_NAME, OWNER from dba_segments where owner = 'A';`
   - > `SELECT segment_name, tablespace_name, blocks FROM dba_segments WHERE owner = 'SCOTT'`
 
@@ -64,6 +65,10 @@
   - Xóa bỏ
   - Thay đổi
   - Cắt bớt
+- Mặc định một initial extent được cấp phát cho một segment khi nó được tạo ra
+  - > ![Extent](../Image/extent.png)
+- Khi initial_extent sử dụng hết, database tự động cấp phát thêm next_extents cho segment
+  - > ![Extent](../Image/extent1.png)
 - Bảng thông tin
   - > dba_extents
 
@@ -71,9 +76,18 @@
 
 - Là đơn vị lưu trữ nhỏ nhất của Oracle database.
 - Mỗi data block có kích thước bằng một số byte. Mặc định là 8 KB. Tham số DB_BLOCK_SIZE quy định kích thước này.
+- > `SELECT value FROM v$parameter WHERE name = 'db_block_size';`
 - Cấu trúc:
-  ![Block](../Image/Block.png)
+  - ![Block1](../Image/block1.png)
+  - ![Block](../Image/Block.png)
 
 ### Câu lệnh
 
 - ` select segment_name, tablespace_name from dba_segments where owner = 'SYS';`
+
+### Bài tập:
+
+1. Hiển thị dung lượng trống trong mỗi tablespace bao gồm các thông tin: tổng dung lượng trống, dung lượng free extents lớn nhất.
+   select dba_tablespaces.tablespace_name, round(sum(bytes)/1024/1024 ,2) as free_space from dba_free_space group by tablespace_name
+
+   select dba_tablespaces.tablespace_name, round(sum(bytes)/1024/1024 ,2) as free_space, max_extents from dba_free_space inner join dba_tablespaces on dba_free_space.tablespace_name = dba_tablespaces.tablespace_name group by dba_tablespaces.tablespace_name, max_extents ;
